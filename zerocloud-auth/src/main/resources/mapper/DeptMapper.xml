@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.zero.cloud.auth.mapper.DeptMapper">
+  <resultMap id="BaseResultMap" type="net.zero.cloud.common.domain.BaseDept">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="platform_id" jdbcType="BIGINT" property="platformId" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="del_flag" jdbcType="TINYINT" property="delFlag" />
+  </resultMap>
+  
+  <update id="updateByPlatformId" parameterType="net.zero.cloud.common.domain.BaseDept">
+	update base_dept 
+	<set>
+	<if test="name != null and name != ''"> name =#{name,jdbcType=VARCHAR},</if>
+	<!--若是允许num=0 在限制条件中需要去掉 num!=''的条件-->
+	</set>
+	where platform_id = #{platformId,jdbcType=BIGINT} 
+  </update>
+
+</mapper>

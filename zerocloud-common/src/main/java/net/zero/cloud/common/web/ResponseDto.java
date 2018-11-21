@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 public class ResponseDto<T> {
 
     @NonNull

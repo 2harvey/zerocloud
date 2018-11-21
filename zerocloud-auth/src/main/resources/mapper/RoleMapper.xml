@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.zero.cloud.auth.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="net.zero.cloud.common.domain.BaseRole">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="platform_id" jdbcType="VARCHAR" property="platformId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  
+  <select id="selectByDeptId" resultMap="BaseResultMap">
+    select * from base_role where deptId = #{deptId} limit #{page,jdbcType=INTEGER},#{limit,jdbcType=INTEGER};
+  </select>
+  <insert id="insertRole" useGeneratedKeys="true" keyProperty="roleId"
+		parameterType="net.zero.cloud.common.domain.BaseRole">
+		insert into base_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleName != null and roleName != ''">
+				role_name,
+			</if>
+			<if test="remark != null and remark != ''">
+				remark,
+			</if>
+			<if test="deptId != null">
+				dept_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="platformId != null and platformId != ''">
+				platform_id,
+			</if>
+			<if test="isDelete != null and isDelete != ''">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleName != null and roleName != ''">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null and remark != ''">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="deptId != null">
+				#{deptId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="platformId != null and platformId != ''">
+				#{platformId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+</mapper>
