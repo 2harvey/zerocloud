@@ -11,6 +11,7 @@
 
     <artifactId>zerocloud-config</artifactId>
     <version>0.0.1</version>
+    <description>consul的配置同步，一次性的</description>
 
     <dependencies>
         <dependency>

@@ -1,4 +1,4 @@
-package net.zero.cloud.config.config;
+package net.zero.cloud.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ecwid.consul.v1.ConsulClient;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.PostConstruct;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-@Configuration
+@Component
 @RefreshScope
 @Slf4j
 public class ConsulConfiguration {
@@ -33,8 +34,10 @@ public class ConsulConfiguration {
     /**
      * key所在的目录前缀，格式为：config/应用名称/
      */
-    @Value("#{'${spring.cloud.consul.config.prefix}/'.concat('${spring.cloud.consul.config.name}/')}")
-    private String keyPrefix;
+    //@Value("#{'${spring.cloud.consul.config.prefix}/'.concat('${spring.cloud.consul.config.name}/')}")
+    //private String keyPrefix;
+    @Value("${spring.cloud.consul.config.prefix}")
+    private String consulPath;
     /**
      * 加载配置信息到consul中
      *
@@ -42,25 +45,25 @@ public class ConsulConfiguration {
      * @param value   配置的值
      * @param keyList 在consul中已存在的配置信息key集合
      */
-    private void visitProps(String key, Object value, List<String> keyList) {
+    private void visitProps(String key, Object value, List<String> keyList,String appName) {
         if (value.getClass() == String.class || value.getClass() == JSONArray.class) {
             // 覆盖已有配置
             if (cover) {
-                this.setKVValue(key, value.toString());
+                this.setKVValue(key, value.toString(),this.consulPath+"/"+appName+"/");
             } else {
                 if (keyList != null && !keyList.contains(key)) {
-                    this.setKVValue(key, value.toString());
+                    this.setKVValue(key, value.toString(),this.consulPath+"/"+appName+"/");
                 }
             }
         } else if (value.getClass() == LinkedHashMap.class) {
             Map<String, Object> map = (LinkedHashMap) value;
             for (Map.Entry<String, Object> entry : map.entrySet()) {
-                visitProps(key + "." + entry.getKey(), entry.getValue(), keyList);
+                visitProps(key + "." + entry.getKey(), entry.getValue(), keyList,appName);
             }
         } else if (value.getClass() == HashMap.class) {
             Map<String, Object> map = (HashMap) value;
             for (Map.Entry<String, Object> entry : map.entrySet()) {
-                visitProps(key + "." + entry.getKey(), entry.getValue(), keyList);
+                visitProps(key + "." + entry.getKey(), entry.getValue(), keyList,appName);
             }
         }
     }
@@ -110,39 +113,43 @@ public class ConsulConfiguration {
      * 启动时加载application.yml配置文件信息到consul配置中心
      * 加载到Consul的文件在ClassPathResource中指定
      */
-    @PostConstruct
-    private void init() {
-        Map<String, Object> props = getProperties(null);
-        List<String> keyList = this.getKVKeysOnly();
+    public void upload(String appName) {
+        Map<String, Object> props = getProperties(appName,null);
+        List<String> keyList = this.getKVKeysOnly(this.consulPath+"/"+appName);
         log.info("Found keys : {}", keyList);
         for (Map.Entry<String, Object> prop : props.entrySet()) {
             //判断有spring.profiles.active则读取对应文件下的配置
             if (prop.getKey().equals("spring.profiles.active")) {
-                Map<String, Object> props2 = getProperties((String) prop.getValue());
+                Map<String, Object> props2 = getProperties(appName,(String) prop.getValue());
                 for (Map.Entry<String, Object> prop2 : props2.entrySet()) {
-                    visitProps(prop2.getKey(), prop2.getValue(), keyList);
+                    visitProps(prop2.getKey(), prop2.getValue(), keyList,appName);
                 }
                 continue;
             }
-            visitProps(prop.getKey(), prop.getValue(), keyList);
+            visitProps(prop.getKey(), prop.getValue(), keyList,appName);
         }
     }
-
+/*
+    @PostConstruct
+    private void init(){
+        upload("zerocloud-auth");
+    }
+*/
     /**
      * 读取配置文件中的内容
      *
      * @param fixed
      * @return
      */
-    private Map<String, Object> getProperties(String fixed) {
+    private Map<String, Object> getProperties(String appName,String fixed) {
         PropertiesProviderSelector propertiesProviderSelector = new PropertiesProviderSelector(
                 new PropertyBasedPropertiesProvider(), new YamlBasedPropertiesProvider(), new JsonBasedPropertiesProvider()
         );
         ClassPathResource resource;
         if (fixed != null && !fixed.isEmpty()) {
-            resource = new ClassPathResource("application-" + fixed + ".properties");
+            resource = new ClassPathResource(appName+"/application-" + fixed + ".properties");
         } else {
-            resource = new ClassPathResource("application.properties");
+            resource = new ClassPathResource(appName+ "/application.properties");
         }
         String fileName = resource.getFilename();
         String path = null;
@@ -168,7 +175,7 @@ public class ConsulConfiguration {
      * @param kvValue 封装的配置信息的map对象
      */
 
-    public void setKVValue(Map<String, String> kvValue) {
+    public void setKVValue(Map<String, String> kvValue,String keyPrefix) {
         for (Map.Entry<String, String> kv : kvValue.entrySet()) {
             try {
                 this.consulClient.setKVValue(keyPrefix + kv.getKey(), kv.getValue());
@@ -178,7 +185,7 @@ public class ConsulConfiguration {
         }
     }
 
-    public void setKVValue(String key, String value) {
+    public void setKVValue(String key, String value,String keyPrefix) {
         try {
             this.consulClient.setKVValue(keyPrefix + key, value);
         } catch (Exception e) {
@@ -214,9 +221,9 @@ public class ConsulConfiguration {
     }
 
 
-    public Map<String, String> getKVValues() {
-        return this.getKVValues(keyPrefix);
-    }
+//    public Map<String, String> getKVValues() {
+//        return this.getKVValues(keyPrefix);
+//    }
 
     /**
      * 获取应用配置的所有key信息
@@ -244,7 +251,7 @@ public class ConsulConfiguration {
         return null;
     }
 
-    public List<String> getKVKeysOnly() {
-        return this.getKVKeysOnly(keyPrefix);
-    }
+//    public List<String> getKVKeysOnly(String keyPrefix) {
+//        return this.getKVKeysOnly(keyPrefix);
+//    }
 }
