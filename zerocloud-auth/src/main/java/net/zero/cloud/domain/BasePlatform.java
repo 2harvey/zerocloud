@@ -1,9 +1,8 @@
-package net.zero.cloud.common.domain;
+package net.zero.cloud.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Table(name = "base_platform")
 public class BasePlatform {

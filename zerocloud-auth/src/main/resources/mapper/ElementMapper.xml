@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.zero.cloud.auth.mapper.BaseElementMapper">
-    <resultMap id="BaseResultMap" type="net.zero.cloud.common.domain.BaseElement">
+    <resultMap id="BaseResultMap" type="net.zero.cloud.domain.BaseElement">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>

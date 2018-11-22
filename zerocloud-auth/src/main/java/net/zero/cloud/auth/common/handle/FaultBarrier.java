@@ -1,7 +1,10 @@
-package net.zero.cloud.common.web;
+package net.zero.cloud.auth.common.handle;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import net.zero.cloud.common.web.AppException;
+import net.zero.cloud.common.web.ResponseCode;
+import net.zero.cloud.common.web.ResponseDto;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

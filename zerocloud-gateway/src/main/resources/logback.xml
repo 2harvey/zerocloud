@@ -20,9 +20,9 @@
   </appender>
 <!--
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>logs/config.log</file>
+    <file>logs/gateway.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logs/%d{yyyy-MM}/config.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>logs/%d{yyyy-MM}/gateway.%d{yyyy-MM-dd}.log</fileNamePattern>
     </rollingPolicy>
     <encoder>
       <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level %logger:%L %n%msg%n</pattern>

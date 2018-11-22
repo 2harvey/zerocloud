@@ -1,11 +1,12 @@
 # Server configuration
 server:
-  port: 8086
+  port: 8087
   servlet:
-    context-path: /auth
+    context-path: /zc
+
 spring:
   application:
-    name: zerocloud-auth
+    name: zerocloud-gateway
   # consul 配置
   cloud:
     consul:

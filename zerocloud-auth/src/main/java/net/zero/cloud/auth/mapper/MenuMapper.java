@@ -1,6 +1,6 @@
 package net.zero.cloud.auth.mapper;
 
-import net.zero.cloud.common.domain.BaseMenu;
+import net.zero.cloud.domain.BaseMenu;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 

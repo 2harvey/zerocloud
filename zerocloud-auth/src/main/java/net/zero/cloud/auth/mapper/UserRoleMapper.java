@@ -1,6 +1,6 @@
 package net.zero.cloud.auth.mapper;
 
-import net.zero.cloud.common.domain.BaseUserRole;
+import net.zero.cloud.domain.BaseUserRole;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

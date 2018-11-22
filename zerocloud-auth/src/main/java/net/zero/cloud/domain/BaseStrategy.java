@@ -1,4 +1,4 @@
-package net.zero.cloud.common.domain;
+package net.zero.cloud.domain;
 
 public class BaseStrategy {
     String beanName;

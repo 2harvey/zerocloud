@@ -26,6 +26,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
         <!-- 持久层 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,11 +49,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
         </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
-        </dependency>
+
         <!-- 通用mapper -->
         <dependency>
             <groupId>tk.mybatis</groupId>
@@ -59,12 +63,6 @@
             <version>1.2.3</version>
         </dependency>
 
-        <!-- swagger -->
-        <dependency>
-            <groupId>com.spring4all</groupId>
-            <artifactId>swagger-spring-boot-starter</artifactId>
-            <version>1.7.0.RELEASE</version>
-        </dependency>
     </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package net.zero.cloud.common.utils;
+package net.zero.cloud.auth.common.utils;
 
 import javax.servlet.http.HttpServletRequest;
 

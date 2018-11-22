@@ -1,10 +1,11 @@
-package net.zero.cloud.common.web;
+package net.zero.cloud.auth.common.handle;
 
 import com.google.common.base.Optional;
+import net.zero.cloud.common.web.AppException;
+import net.zero.cloud.common.web.ResponseCode;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;

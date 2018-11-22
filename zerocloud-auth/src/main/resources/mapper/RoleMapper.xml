@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.zero.cloud.auth.mapper.RoleMapper">
-  <resultMap id="BaseResultMap" type="net.zero.cloud.common.domain.BaseRole">
+  <resultMap id="BaseResultMap" type="net.zero.cloud.domain.BaseRole">
     <id column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -15,7 +15,7 @@
     select * from base_role where deptId = #{deptId} limit #{page,jdbcType=INTEGER},#{limit,jdbcType=INTEGER};
   </select>
   <insert id="insertRole" useGeneratedKeys="true" keyProperty="roleId"
-		parameterType="net.zero.cloud.common.domain.BaseRole">
+		parameterType="net.zero.cloud.domain.BaseRole">
 		insert into base_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="roleName != null and roleName != ''">
