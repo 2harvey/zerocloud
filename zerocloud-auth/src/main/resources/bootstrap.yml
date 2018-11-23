@@ -1,8 +1,8 @@
 # Server configuration
 server:
   port: 8086
-  servlet:
-    context-path: /auth
+  #servlet:
+  #  context-path: /auth
 spring:
   application:
     name: zerocloud-auth

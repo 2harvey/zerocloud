@@ -11,6 +11,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.UnsatisfiedServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,8 +30,8 @@ public class FaultBarrier {
 		final ImmutableMap.Builder<Class<? extends Throwable>, String> builder = ImmutableMap.builder();
 		// SpringMVC中参数类型转换异常，常见于String找不到对应的ENUM而抛出的异常
 
-		//builder.put(UnsatisfiedServletRequestParameterException.class, ResponseCode.FIELD_ERROR.getCode().toString());
-		//builder.put(IllegalArgumentException.class, ResponseCode.FIELD_ERROR.getCode().toString());
+		builder.put(UnsatisfiedServletRequestParameterException.class, ResponseCode.FIELD_ERROR.getCode().toString());
+		builder.put(IllegalArgumentException.class, ResponseCode.FIELD_ERROR.getCode().toString());
 
 		// HTTP Request Method不存在
 
@@ -55,8 +56,11 @@ public class FaultBarrier {
 			url += "?" + request.getQueryString();
 		}
 		log.warn("url={} 请求错误-->{}:{}",url,ex.getErrCode(),ex.getMessage());
-		ResponseDto responseDto = new ResponseDto(ex.getErrCode(),ex.getMessage());
-		return responseDto;
+		if (ex.getMessage()==null){
+		    return new ResponseDto(ex.getErrCode());
+        }else {
+            return new ResponseDto(ex.getErrCode(), ex.getMessage());
+        }
 	}
 
 	@ExceptionHandler(Exception.class)

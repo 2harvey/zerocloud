@@ -30,8 +30,8 @@
   </appender>
 -->
 
-  <!--<logger name="org.springframework.jdbc" level="DEBUG"/>-->
-
+  <logger name="org.springframework.cloud.gateway" level="DEBUG"/>
+    <logger name="net.zero.cloud.gateway" level="DEBUG"/>
   <root level="INFO">
     <appender-ref ref="STDOUT"/>
     <!--<appender-ref ref="FILE"/>-->

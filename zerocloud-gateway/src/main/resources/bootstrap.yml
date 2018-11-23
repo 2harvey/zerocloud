@@ -1,14 +1,21 @@
 # Server configuration
 server:
   port: 8087
-  servlet:
-    context-path: /zc
+#  servlet:
+#    context-path: /zc
 
 spring:
   application:
     name: zerocloud-gateway
   # consul 配置
+
   cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      #default-filters:
+      #routes:
     consul:
       # consul服务器地址
       host: localhost
@@ -47,3 +54,7 @@ spring:
         health-check-path: /actuator/info
         # 服务注册标识，格式为：应用名称+服务器IP+端口
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+    net.zero.cloud.gateway: debug
